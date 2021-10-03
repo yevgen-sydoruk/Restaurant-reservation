@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
+import { createReservation } from "../utils/api";
 //
 
 function NewReservation() {
@@ -19,9 +20,18 @@ function NewReservation() {
     const history = useHistory();
 
     //submit handle to send data
-    function handleSubmit(event) {
+    async function handleSubmit(event) {
         event.preventDefault();
-        history.push("/dashboard");
+        const abortController = new AbortController();
+        // console.log("here", formData);
+        const response = await createReservation(
+            { ...formData },
+            abortController.signal
+        );
+        history.push(`/dashboard?date=${formData.reservation_date}`);
+
+        // console.log("response", response);
+        return response;
     }
 
     function handleCancel() {
@@ -37,23 +47,20 @@ function NewReservation() {
     }
 
     return (
-        //ask mentor
         <div className="container">
             <form onSubmit={(event) => handleSubmit(event)}>
                 <h1>New Reservation</h1>
                 <div className="form-group">
-                    <label htmlFor="first_name">
-                        First name:{" "}
-                        <input
-                            className="form-control"
-                            id="first_name"
-                            name="first_name"
-                            type="text"
-                            value={formData.first_name}
-                            onChange={(event) => handleChange(event)}
-                            required
-                        />
-                    </label>
+                    <label htmlFor="first_name">First name: </label>
+                    <input
+                        className="form-control"
+                        id="first_name"
+                        name="first_name"
+                        type="text"
+                        value={formData.first_name}
+                        onChange={(event) => handleChange(event)}
+                        required
+                    />
                 </div>
 
                 <div className="form-group">
