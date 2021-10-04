@@ -3,6 +3,17 @@
  */
 const service = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
+let moment = require("moment");
+
+let weekDays = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+];
 
 async function create(req, res, next) {
     // console.log(req.body.data);
@@ -92,7 +103,7 @@ function hasReservationDate(req, res, next) {
         }
         next({
             status: 400,
-            message: `reservation_date is not a valid reservation date`,
+            message: `reservation_date must be today or a future date and the restaurant is closed on Tuesday`,
         });
     }
     return next({
@@ -132,8 +143,15 @@ function hasPeople(req, res, next) {
 }
 
 function validReservationDate(reservationDate) {
-    reservationDate = reservationDate.replace(/\D/g, "");
-    return reservationDate.length === 8;
+    const today = moment().format().split("T")[0].replace(/\D/g, "");
+    const convertedReservationDate = reservationDate.replace(/\D/g, ""); //regexed date from request
+    const newDate = new Date(reservationDate);
+    const day = weekDays[newDate.getDay()]; //get actual day from request
+    return (
+        convertedReservationDate.length === 8 &&
+        day != "Tuesday" &&
+        Number(convertedReservationDate) >= Number(today)
+    );
 }
 
 function validReservationTime(reservationTime) {

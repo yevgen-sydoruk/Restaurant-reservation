@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
+let moment = require("moment");
 
 /**
  * Defines the dashboard page.
@@ -31,25 +32,23 @@ function Dashboard({ date }) {
     }
 
     function handlePreviousBtn() {
-        const currentDate = new Date(selectedDate);
-        let previousDate = new Date(
-            currentDate.setDate(currentDate.getDate() - 1)
-        );
-        previousDate = previousDate.toISOString().split("T")[0];
+        const previousDate = moment(selectedDate)
+            .add(-1, "days")
+            .format()
+            .split("T")[0];
         setSelectedDate(previousDate);
     }
     function handleCurrentBtn() {
-        const currentDate = new Date();
-        const currentDateString = currentDate.toISOString().split("T")[0];
-        setSelectedDate(currentDateString);
+        const today = moment().format().split("T")[0];
+        setSelectedDate(today);
     }
     function handleNextBtn() {
-        const currentDate = new Date(selectedDate);
-        let nextDate = new Date(currentDate.setDate(currentDate.getDate() + 1));
-        nextDate = nextDate.toISOString().split("T")[0];
+        const nextDate = moment(selectedDate)
+            .add(1, "days")
+            .format()
+            .split("T")[0];
         setSelectedDate(nextDate);
     }
-    
 
     const reservationRows = reservations.map((reservation) => {
         return (
@@ -122,7 +121,6 @@ function Dashboard({ date }) {
             </div>
         </main>
     );
-    
 }
 
 export default Dashboard;

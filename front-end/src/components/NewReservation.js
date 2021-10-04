@@ -54,7 +54,6 @@ function NewReservation() {
 
     function formatMobileNumber(value) {
         value = value.replace(/[^\d]/g, "");
-        const phoneNumberLength = value.length;
         if (value.length < 4) return value;
         if (value.length < 7) {
             return `${value.slice(0, 3)}-${value.slice(3)}`;
