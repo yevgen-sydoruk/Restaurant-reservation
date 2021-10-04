@@ -13,15 +13,17 @@ async function create(req, res, next) {
 }
 
 async function list(req, res, next) {
-    // console.log("data1", req.query);
+    // console.log("reserv controller", req.query);
     const data = await service.list(req.query);
+    // console.log(data);
     res.json({
         data,
     });
 }
+
 function hasData(req, res, next) {
     // console.log("data31231231", req.body);
-    console.log("data", req.body.data);
+    // console.log("data", req.body.data);
     const data = req.body.data;
     if (data) {
         return next();
@@ -36,7 +38,7 @@ function hasData(req, res, next) {
 function hasFirstName(req, res, next) {
     // console.log("data31231231", req.body);
     const firstName = req.body.data.first_name;
-    console.log("firstName", firstName);
+    // console.log("firstName", firstName);
 
     if (firstName) {
         return next();
@@ -50,7 +52,7 @@ function hasFirstName(req, res, next) {
 
 function hasLastName(req, res, next) {
     const lastName = req.body.data.last_name;
-    console.log("lastName", lastName);
+    // console.log("lastName", lastName);
 
     if (lastName) {
         return next();
@@ -64,14 +66,20 @@ function hasLastName(req, res, next) {
 
 function hasMobileNumber(req, res, next) {
     const mobileNumber = req.body.data.mobile_number;
-    console.log("mobileNumber", mobileNumber);
-
-    if (mobileNumber) {
+    // console.log("mobileNumber", mobileNumber);
+    let validation =
+        /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+    if (!mobileNumber) {
+        next({
+            status: 400,
+            message: "mobile_number property is missing.",
+        });
+    } else if (mobileNumber.match(validation)) {
         return next();
     } else {
         next({
             status: 400,
-            message: "mobile_number property is missing.",
+            message: "mobile_number format is incorrect",
         });
     }
 }
@@ -79,19 +87,30 @@ function hasMobileNumber(req, res, next) {
 function hasReservationDate(req, res, next) {
     const reservationDate = req.body.data.reservation_date;
     if (reservationDate) {
-        return next();
-    } else {
+        if (validReservationDate(reservationDate)) {
+            return next();
+        }
         next({
             status: 400,
-            message: "reservation_date property is missing.",
+            message: `reservation_date is not a valid reservation date`,
         });
     }
+    return next({
+        status: 400,
+        message: "data must have reservation_date property",
+    });
 }
 
 function hasReservationTime(req, res, next) {
     const reservationTime = req.body.data.reservation_time;
     if (reservationTime) {
-        return next();
+        if (validReservationTime(reservationTime)) {
+            return next();
+        }
+        next({
+            status: 400,
+            message: `reservation_time is not a valid reservation time`,
+        });
     } else {
         next({
             status: 400,
@@ -110,6 +129,16 @@ function hasPeople(req, res, next) {
             message: "people property is missing.",
         });
     }
+}
+
+function validReservationDate(reservationDate) {
+    reservationDate = reservationDate.replace(/\D/g, "");
+    return reservationDate.length === 8;
+}
+
+function validReservationTime(reservationTime) {
+    reservationTime = reservationTime.replace(/\D/g, "");
+    return reservationTime.length === 4;
 }
 
 module.exports = {

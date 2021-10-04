@@ -40,10 +40,29 @@ function NewReservation() {
 
     function handleChange(event) {
         let value = event.target.value;
+        if (event.target.name === "people") {
+            value = Number(value);
+        }
+        if (event.target.name === "mobile_number") {
+            value = formatMobileNumber(value);
+        }
         setFormData({
             ...formData,
             [event.target.name]: value,
         });
+    }
+
+    function formatMobileNumber(value) {
+        value = value.replace(/[^\d]/g, "");
+        const phoneNumberLength = value.length;
+        if (value.length < 4) return value;
+        if (value.length < 7) {
+            return `${value.slice(0, 3)}-${value.slice(3)}`;
+        }
+        return `${value.slice(0, 3)}-${value.slice(3, 6)}-${value.slice(
+            6,
+            10
+        )}`;
     }
 
     return (
