@@ -26,7 +26,8 @@ async function create(req, res, next) {
 async function list(req, res, next) {
     // console.log("reserv controller", req.query);
     const data = await service.list(req.query);
-    // console.log(data);
+    console.log(data[0].first_name);
+    console.log(res.body.data);
     res.json({
         data,
     });

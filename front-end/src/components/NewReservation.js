@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { createReservation } from "../utils/api";
+import ErrorAlert from "../layout/ErrorAlert";
 //
 
 function NewReservation() {
@@ -15,23 +16,29 @@ function NewReservation() {
     };
 
     const [formData, setFormData] = useState(initialFormState); //useState to create a new set of data
+    const [error, setError] = useState(null);
 
     //allows to go back on the previous or specified page
     const history = useHistory();
 
     //submit handle to send data
     async function handleSubmit(event) {
-        event.preventDefault();
-        const abortController = new AbortController();
-        // console.log("here", formData);
-        const response = await createReservation(
-            { ...formData },
-            abortController.signal
-        );
-        history.push(`/dashboard?date=${formData.reservation_date}`);
+        try {
+            event.preventDefault();
+            const abortController = new AbortController();
+            // console.log("here", formData);
+            const response = await createReservation(
+                { ...formData },
+                abortController.signal
+            );
+            history.push(`/dashboard?date=${formData.reservation_date}`);
 
-        // console.log("response", response);
-        return response;
+            // console.log("response", response);
+            return response;
+        } catch (error) {
+            setError(error);
+            console.error(error);
+        }
     }
 
     function handleCancel() {
@@ -68,6 +75,7 @@ function NewReservation() {
         <div className="container">
             <form onSubmit={(event) => handleSubmit(event)}>
                 <h1>New Reservation</h1>
+                <ErrorAlert error={error} />
                 <div className="form-group">
                     <label htmlFor="first_name">First name: </label>
                     <input

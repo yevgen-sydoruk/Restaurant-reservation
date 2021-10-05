@@ -117,7 +117,7 @@ function Dashboard({ date }) {
                     <tbody>{reservationRows}</tbody>
                 </table>
 
-                {JSON.stringify(reservations)}
+                {/* {JSON.stringify(reservations)} */}
             </div>
         </main>
     );
