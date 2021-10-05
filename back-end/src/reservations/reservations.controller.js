@@ -103,7 +103,7 @@ function hasReservationDate(req, res, next) {
         }
         next({
             status: 400,
-            message: `reservation_date must be today or a future date and the restaurant is closed on Tuesday`,
+            message: `reservation_date must be today or a future date and the restaurant is closed on Tuesday.`,
         });
     }
     return next({
@@ -120,7 +120,7 @@ function hasReservationTime(req, res, next) {
         }
         next({
             status: 400,
-            message: `reservation_time is not a valid reservation time`,
+            message: `reservation_time must be after 9:30am and before 10:30pm.`,
         });
     } else {
         next({
@@ -143,20 +143,39 @@ function hasPeople(req, res, next) {
 }
 
 function validReservationDate(reservationDate) {
-    const today = moment().format().split("T")[0].replace(/\D/g, "");
+    const convertedToday = moment().format().split("T")[0].replace(/\D/g, "");
     const convertedReservationDate = reservationDate.replace(/\D/g, ""); //regexed date from request
-    const newDate = new Date(reservationDate);
-    const day = weekDays[newDate.getDay()]; //get actual day from request
+    const reservationDay = moment(reservationDate);
+    const getDayOfWeek = weekDays[reservationDay.day() - 1];
+
     return (
         convertedReservationDate.length === 8 &&
-        day != "Tuesday" &&
-        Number(convertedReservationDate) >= Number(today)
+        getDayOfWeek != "Tuesday" &&
+        Number(convertedReservationDate) >= Number(convertedToday)
     );
 }
 
 function validReservationTime(reservationTime) {
     reservationTime = reservationTime.replace(/\D/g, "");
-    return reservationTime.length === 4;
+    let openHours = moment();
+    openHours.set({ hour: 9, minute: 30, second: 0 });
+    convertedOpenHours = openHours
+        .format()
+        .split("T")[1]
+        .replace(/\D/g, "")
+        .substring(0, 4);
+    let closeHours = moment();
+    closeHours.set({ hour: 22, minute: 30, second: 0 });
+    convertedCloseHours = closeHours
+        .format()
+        .split("T")[1]
+        .replace(/\D/g, "")
+        .substring(0, 4);
+    return (
+        reservationTime.length === 4 &&
+        Number(reservationTime) > Number(convertedOpenHours) &&
+        Number(convertedCloseHours) > Number(reservationTime)
+    );
 }
 
 module.exports = {
