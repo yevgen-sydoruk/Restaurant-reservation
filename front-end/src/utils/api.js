@@ -83,3 +83,15 @@ export async function createReservation(data, signal) {
     };
     return await fetchJson(url, options);
 }
+
+export async function createTable(data, signal) {
+    const url = `${API_BASE_URL}/tables/new`;
+    console.log(data);
+    const options = {
+        method: "POST",
+        headers,
+        body: JSON.stringify({ data }),
+        signal,
+    };
+    return await fetchJson(url, options);
+}

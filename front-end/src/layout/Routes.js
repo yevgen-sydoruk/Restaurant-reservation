@@ -4,6 +4,7 @@ import { Redirect, Route, Switch } from "react-router-dom";
 
 import Dashboard from "../components/Dashboard";
 import NewReservation from "../components/NewReservation";
+import NewTable from "../components/NewTable";
 
 import NotFound from "./NotFound";
 import { today } from "../utils/date-time";
@@ -16,25 +17,28 @@ import { today } from "../utils/date-time";
  * @returns {JSX.Element}
  */
 function Routes() {
-  return (
-    <Switch>
-      <Route exact={true} path="/">
-        <Redirect to={"/dashboard"} />
-      </Route>
-      <Route exact={true} path="/reservations">
-        <Redirect to={"/dashboard"} />
-      </Route>
-      <Route exact={true} path="/reservations/new">
-        <NewReservation/>
-      </Route>
-      <Route path="/dashboard">
-        <Dashboard date={today()} />
-      </Route>
-      <Route>
-        <NotFound />
-      </Route>
-    </Switch>
-  );
+    return (
+        <Switch>
+            <Route exact={true} path="/">
+                <Redirect to={"/dashboard"} />
+            </Route>
+            <Route exact={true} path="/reservations">
+                <Redirect to={"/dashboard"} />
+            </Route>
+            <Route exact={true} path="/reservations/new">
+                <NewReservation />
+            </Route>
+            <Route path="/dashboard">
+                <Dashboard date={today()} />
+            </Route>
+            <Route path="/tables/new">
+                <NewTable />
+            </Route>
+            <Route>
+                <NotFound />
+            </Route>
+        </Switch>
+    );
 }
 
 export default Routes;
