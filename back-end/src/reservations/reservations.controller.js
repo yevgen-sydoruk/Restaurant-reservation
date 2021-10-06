@@ -23,13 +23,21 @@ async function create(req, res, next) {
     });
 }
 
-async function list(req, res, next) {
-    // console.log("reserv controller", req.query);
-    const data = await service.list(req.query);
+// async function list(req, res, next) {
+//     // console.log("reserv controller", req.query);
+//     const data = await service.list(req.query);
 
-    res.json({
-        data,
-    });
+//     console.log(res.body);
+//     console.log(req.query);
+//     res.json({
+//         data,
+//     });
+// }
+
+async function list(req, res, next) {
+    const query = req.query.date;
+    const data = await service.list(query);
+    res.json({ data });
 }
 
 function hasData(req, res, next) {
