@@ -179,7 +179,7 @@ function validReservationTime(reservationTime) {
         .replace(/\D/g, "")
         .substring(0, 4);
     let closeHours = moment();
-    closeHours.set({ hour: 22, minute: 30, second: 0 });
+    closeHours.set({ hour: 21, minute: 30, second: 0 });
     convertedCloseHours = closeHours
         .format()
         .split("T")[1]
