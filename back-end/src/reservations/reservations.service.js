@@ -14,7 +14,31 @@ function list(query) {
         .orderBy("reservation_time", "asc");
 }
 
+function search(reservationId) {
+    return knex("reservations")
+        .select("*")
+        .where({ reservation_id: reservationId });
+}
+
+function edit(data) {
+    return knex(tableName)
+        .where({ reservation_id: data.reservation_id })
+        .update(
+            {
+                first_name: data.first_name,
+                last_name: data.last_name,
+                mobile_number: data.mobile_number,
+                reservation_date: data.reservation_date,
+                reservation_time: data.reservation_time,
+                people: data.people,
+            },
+            "*"
+        );
+}
+
 module.exports = {
     list,
     create,
+    search,
+    edit,
 };

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import { listReservations } from "../utils/api";
+import { Link, useLocation } from "react-router-dom";
+import { listReservations, listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 let moment = require("moment");
 
@@ -14,25 +14,64 @@ function Dashboard({ todayDate }) {
     const query = new URLSearchParams(useLocation().search);
     const queryDate = query.get("date");
 
-    console.log(queryDate);
     const [reservations, setReservations] = useState([]);
     const [reservationsError, setReservationsError] = useState(null);
+
+    const [tables, setTables] = useState([]);
+    const [tablesError, setTablesError] = useState(null);
 
     const [selectedDate, setSelectedDate] = useState(
         queryDate ? queryDate : todayDate
     );
 
-    useEffect(loadDashboard, [selectedDate]);
+    // useEffect(loadDashboard, [selectedDate]);
 
-    function loadDashboard() {
+    // async function loadDashboard() {
+    //     const abortController = new AbortController();
+
+    //     setReservationsError(null);
+    //     const date = selectedDate; //for test pass
+    //     await listReservations({ date }, abortController.signal)
+    //         .then(setReservations)
+    //         .catch(setReservationsError);
+
+    //     await listTables(abortController.signal)
+    //         .then(setTables)
+    //         .catch(setTablesError);
+
+    //     return () => abortController.abort();
+    // }
+
+    useEffect(() => {
         const abortController = new AbortController();
         setReservationsError(null);
-        const date = selectedDate; //for test pass
-        listReservations({ date }, abortController.signal)
-            .then(setReservations)
-            .catch(setReservationsError);
-        return () => abortController.abort();
-    }
+        async function loadDashboard() {
+            try {
+                // setError(null);
+                const date = selectedDate; //for test pass
+                const response = await listReservations(
+                    { date },
+                    abortController.signal
+                );
+                setReservations(response);
+            } catch (error) {
+                setReservationsError(error);
+                console.error(error);
+            }
+            try {
+                setTablesError(null);
+                const response = await listTables(abortController.signal);
+                setTables(response);
+            } catch (error) {
+                setTablesError(error);
+                console.error(error);
+            }
+        }
+        loadDashboard();
+        return () => {
+            abortController.abort();
+        };
+    }, [selectedDate]);
 
     function handleChange(event) {
         const date = event.target.value;
@@ -58,6 +97,23 @@ function Dashboard({ todayDate }) {
         setSelectedDate(nextDate);
     }
 
+    function showSeatButton(reservation) {
+        return (
+            <Link
+                to={{
+                    pathname: `/reservations/${reservation.reservation_id}/seat`,
+                    state: {
+                        tables: tables,
+                    },
+                }}
+                type="button"
+                className="btn"
+            >
+                Seat
+            </Link>
+        );
+    }
+
     const reservationRows = reservations.map((reservation) => {
         return (
             <tr key={reservation.reservation_id}>
@@ -68,6 +124,20 @@ function Dashboard({ todayDate }) {
                 <th>{reservation.reservation_time}</th>
                 <th>{reservation.reservation_date}</th>
                 <th>{reservation.people}</th>
+                <th>{showSeatButton(reservation)}</th>
+            </tr>
+        );
+    });
+
+    const tableRows = tables.map((table) => {
+        return (
+            <tr key={table.table_id}>
+                <th>{table.table_id}</th>
+                <th>{table.table_name}</th>
+                <th>{table.capacity}</th>
+                <th data-table-id-status={table.table_id}>
+                    {table.reservation_id ? "Occupied" : "Free"}
+                </th>
             </tr>
         );
     });
@@ -120,9 +190,24 @@ function Dashboard({ todayDate }) {
                             <th>Reservation Time</th>
                             <th>Reservation date</th>
                             <th>People</th>
+                            <th>Seat</th>
                         </tr>
                     </thead>
                     <tbody>{reservationRows}</tbody>
+                </table>
+                <h3>Tables</h3>
+                <ErrorAlert error={tablesError} />
+                <table className="table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Capacity</th>
+                            <th>Availability</th>
+                            <th>Finish</th>
+                        </tr>
+                    </thead>
+                    <tbody>{tableRows}</tbody>
                 </table>
             </div>
         </main>

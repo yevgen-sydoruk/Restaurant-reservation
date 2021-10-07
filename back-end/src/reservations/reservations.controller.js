@@ -23,22 +23,30 @@ async function create(req, res, next) {
     });
 }
 
-// async function list(req, res, next) {
-//     // console.log("reserv controller", req.query);
-//     const data = await service.list(req.query);
-
-//     console.log(res.body);
-//     console.log(req.query);
-//     res.json({
-//         data,
-//     });
-// }
-
 async function list(req, res, next) {
     const query = req.query.date;
     // console.log(query);
     const data = await service.list(query);
     res.json({ data });
+}
+
+async function search(req, res, next) {
+    const searchedReservation = await service.search(req.params.reservation_id);
+    if (searchedReservation[0]) {
+        return res.json({ data: searchedReservation[0] });
+    } else {
+        next({
+            status: 400,
+            message: `${req.params.reservation_id} does not exists`,
+        });
+    }
+}
+
+async function edit(req, res, next) {
+    const editedReservation = await service.edit(req.body.data);
+    res.json({
+        data: editedReservation[0],
+    });
 }
 
 function hasData(req, res, next) {
@@ -203,5 +211,16 @@ module.exports = {
         hasReservationTime,
         hasPeople,
         asyncErrorBoundary(create),
+    ],
+    search: [asyncErrorBoundary(search)],
+    edit: [
+        hasData,
+        hasFirstName,
+        hasLastName,
+        hasMobileNumber,
+        hasReservationDate,
+        hasReservationTime,
+        hasPeople,
+        asyncErrorBoundary(edit),
     ],
 };

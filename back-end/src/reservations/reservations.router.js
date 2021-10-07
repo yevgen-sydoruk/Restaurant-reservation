@@ -15,4 +15,10 @@ router
 
 router.route("/new").post(controller.create).all(methodNotAllowed);
 
+router
+    .route("/:reservation_id")
+    .get(controller.search)
+    .put(controller.edit)
+    .all(methodNotAllowed);
+
 module.exports = router;
