@@ -23,17 +23,16 @@ function NewReservation() {
 
     //submit handle to send data
     async function handleSubmit(event) {
+        event.preventDefault();
         try {
-            event.preventDefault();
             const abortController = new AbortController();
             // console.log("here", formData);
             const response = await createReservation(
                 { ...formData },
                 abortController.signal
             );
+            console.log(`/dashboard?date=${formData.reservation_date}`);
             history.push(`/dashboard?date=${formData.reservation_date}`);
-
-            // console.log("response", response);
             return response;
         } catch (error) {
             setError(error);
@@ -58,11 +57,11 @@ function NewReservation() {
             [event.target.name]: value,
         });
     }
-
+    // validation for 10digit number
     function formatMobileNumber(value) {
         value = value.replace(/[^\d]/g, "");
-        if (value.length < 4) return value;
-        if (value.length < 7) {
+        if (value.length < 5) return value;
+        if (value.length < 8) {
             return `${value.slice(0, 3)}-${value.slice(3)}`;
         }
         return `${value.slice(0, 3)}-${value.slice(3, 6)}-${value.slice(
@@ -70,6 +69,15 @@ function NewReservation() {
             10
         )}`;
     }
+
+    // function formatMobileNumber(value) {
+    //     value = value.replace(/[^\d]/g, "");
+    //     if (value.length < 5) return value;
+    //     if (value.length < 7) {
+    //         return `${value.slice(0, 3)}-${value.slice(3)}`;
+    //     }
+    //     return `${value.slice(0, 3)}-${value.slice(3, 7)}`;
+    // }
 
     return (
         <div className="container">
@@ -145,6 +153,7 @@ function NewReservation() {
                         pattern="[0-9]{2}:[0-9]{2}"
                         value={formData.reservation_time}
                         onChange={(event) => handleChange(event)}
+                        step="300"
                         required
                     />
                 </div>

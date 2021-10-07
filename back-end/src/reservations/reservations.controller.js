@@ -36,6 +36,7 @@ async function create(req, res, next) {
 
 async function list(req, res, next) {
     const query = req.query.date;
+    // console.log(query);
     const data = await service.list(query);
     res.json({ data });
 }
@@ -86,14 +87,19 @@ function hasLastName(req, res, next) {
 function hasMobileNumber(req, res, next) {
     const mobileNumber = req.body.data.mobile_number;
     // console.log("mobileNumber", mobileNumber);
-    let validation =
+    let validation1 = /^([0-9]{3})[-. ]?([0-9]{4})$/im;
+    let validation2 =
         /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+    // /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
     if (!mobileNumber) {
         next({
             status: 400,
             message: "mobile_number property is missing.",
         });
-    } else if (mobileNumber.match(validation)) {
+    } else if (
+        mobileNumber.match(validation1) ||
+        mobileNumber.match(validation2)
+    ) {
         return next();
     } else {
         next({
@@ -166,7 +172,7 @@ function validReservationDate(reservationDate) {
 function validReservationTime(reservationTime) {
     reservationTime = reservationTime.replace(/\D/g, "");
     let openHours = moment();
-    openHours.set({ hour: 9, minute: 30, second: 0 });
+    openHours.set({ hour: 10, minute: 30, second: 0 });
     convertedOpenHours = openHours
         .format()
         .split("T")[1]

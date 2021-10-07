@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 let moment = require("moment");
@@ -9,18 +10,25 @@ let moment = require("moment");
  *  the date for which the user wants to view reservations.
  * @returns {JSX.Element}
  */
-function Dashboard({ date }) {
+function Dashboard({ todayDate }) {
+    const query = new URLSearchParams(useLocation().search);
+    const queryDate = query.get("date");
+
+    console.log(queryDate);
     const [reservations, setReservations] = useState([]);
     const [reservationsError, setReservationsError] = useState(null);
 
-    const [selectedDate, setSelectedDate] = useState(date);
+    const [selectedDate, setSelectedDate] = useState(
+        queryDate ? queryDate : todayDate
+    );
 
     useEffect(loadDashboard, [selectedDate]);
 
     function loadDashboard() {
         const abortController = new AbortController();
         setReservationsError(null);
-        listReservations({ selectedDate }, abortController.signal)
+        const date = selectedDate; //for test pass
+        listReservations({ date }, abortController.signal)
             .then(setReservations)
             .catch(setReservationsError);
         return () => abortController.abort();
