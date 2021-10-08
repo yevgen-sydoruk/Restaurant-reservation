@@ -5,7 +5,7 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import Dashboard from "../components/Dashboard";
 import NewReservation from "../components/NewReservation";
 import NewTable from "../components/NewTable";
-import SeatButton from "../components/SeatButton";
+import SeatButton from "../components/SeatOption";
 
 import NotFound from "./NotFound";
 import { today } from "../utils/date-time";

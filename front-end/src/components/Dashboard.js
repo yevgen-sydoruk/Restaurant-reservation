@@ -23,25 +23,6 @@ function Dashboard({ todayDate }) {
     const [selectedDate, setSelectedDate] = useState(
         queryDate ? queryDate : todayDate
     );
-
-    // useEffect(loadDashboard, [selectedDate]);
-
-    // async function loadDashboard() {
-    //     const abortController = new AbortController();
-
-    //     setReservationsError(null);
-    //     const date = selectedDate; //for test pass
-    //     await listReservations({ date }, abortController.signal)
-    //         .then(setReservations)
-    //         .catch(setReservationsError);
-
-    //     await listTables(abortController.signal)
-    //         .then(setTables)
-    //         .catch(setTablesError);
-
-    //     return () => abortController.abort();
-    // }
-
     useEffect(() => {
         const abortController = new AbortController();
         setReservationsError(null);
@@ -200,7 +181,7 @@ function Dashboard({ todayDate }) {
                 <table className="table">
                     <thead>
                         <tr>
-                            <th>#</th>
+                            <th>Id</th>
                             <th>Name</th>
                             <th>Capacity</th>
                             <th>Availability</th>

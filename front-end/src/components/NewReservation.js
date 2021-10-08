@@ -31,12 +31,12 @@ function NewReservation() {
                 { ...formData },
                 abortController.signal
             );
-            console.log(`/dashboard?date=${formData.reservation_date}`);
+            // console.log(`/dashboard?date=${formData.reservation_date}`);
             history.push(`/dashboard?date=${formData.reservation_date}`);
             return response;
         } catch (error) {
             setError(error);
-            console.error(error);
+            // console.error(error);
         }
     }
 

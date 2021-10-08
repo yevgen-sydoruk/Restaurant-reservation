@@ -101,3 +101,15 @@ export async function createTable(data, signal) {
     };
     return await fetchJson(url, options);
 }
+
+export async function updateSeat(data, signal) {
+    const url = new URL(`${API_BASE_URL}/tables/${data.table_id}/seat`);
+    // console.log(data);
+    const options = {
+        method: "PUT",
+        headers,
+        body: JSON.stringify({ data: data }),
+        signal,
+    };
+    return await fetchJson(url, options);
+}
