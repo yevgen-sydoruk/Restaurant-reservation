@@ -27,6 +27,14 @@ async function update(req, res, next) {
     });
 }
 
+async function remove(req, res, next) {
+    const tableId = req.params.table_id;
+    const response = await service.remove(tableId);
+    return res.status(200).json({
+        data: response[0],
+    });
+}
+
 function hasData(req, res, next) {
     const data = req.body.data;
     if (data) {
@@ -83,18 +91,19 @@ function hasReservationId(req, res, next) {
         });
     }
 }
-function hasTableId(req, res, next) {
-    const reservationId = req.body.data.reservation_id;
-    if (reservationId) {
-        res.locals.reservationId = reservationId;
+async function hasTableId(req, res, next) {
+    const table = await service.find(req.params.table_id);
+    if (table) {
+        res.locals.table = table;
         return next();
     } else {
         next({
-            status: 400,
-            message: "reservation_id property is missing",
+            status: 404,
+            message: `${req.params.table_id} table_id property is missing`,
         });
     }
 }
+
 async function reservationExists(req, res, next) {
     const reservation = await service.findReservationId(
         res.locals.reservationId
@@ -102,11 +111,12 @@ async function reservationExists(req, res, next) {
     if (reservation) {
         res.locals.reservation = reservation;
         return next();
+    } else {
+        next({
+            status: 404,
+            message: `${res.locals.reservationId} does not exist`,
+        });
     }
-    next({
-        status: 404,
-        message: `${res.locals.reservationId} does not exist`,
-    });
 }
 async function hasEnoughtCapacity(req, res, next) {
     const table = await service.find(req.params.table_id);
@@ -137,6 +147,19 @@ function tableOccupied(req, res, next) {
         return next();
     }
 }
+
+function tableIsNotOccupied(req, res, next) {
+    // console.log("here id", res.locals.table.reservation_id);
+    if (res.locals.table.reservation_id) {
+        return next();
+    } else {
+        next({
+            status: 400,
+            message: `table is not occupied`,
+        });
+    }
+}
+
 module.exports = {
     create: [hasData, hasTableName, hasCapacity, asyncErrorBoundary(create)],
     list: [asyncErrorBoundary(list)],
@@ -147,5 +170,10 @@ module.exports = {
         asyncErrorBoundary(hasEnoughtCapacity),
         tableOccupied,
         asyncErrorBoundary(update),
+    ],
+    delete: [
+        asyncErrorBoundary(hasTableId),
+        tableIsNotOccupied,
+        asyncErrorBoundary(remove),
     ],
 };

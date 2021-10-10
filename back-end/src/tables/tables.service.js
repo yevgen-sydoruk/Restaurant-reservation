@@ -21,6 +21,12 @@ function findReservationId(reservationId) {
         .where({ reservation_id: reservationId })
         .first();
 }
+function remove(tableId) {
+    console.log("here");
+    return knex("tables")
+        .where({ table_id: tableId })
+        .update({ reservation_id: null });
+}
 
 module.exports = {
     list,
@@ -28,4 +34,5 @@ module.exports = {
     update,
     find,
     findReservationId,
+    remove,
 };
