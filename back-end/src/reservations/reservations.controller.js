@@ -36,7 +36,7 @@ async function search(req, res, next) {
         return res.json({ data: searchedReservation[0] });
     } else {
         next({
-            status: 400,
+            status: 404,
             message: `${req.params.reservation_id} does not exists`,
         });
     }

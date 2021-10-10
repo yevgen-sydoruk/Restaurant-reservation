@@ -83,6 +83,18 @@ function hasReservationId(req, res, next) {
         });
     }
 }
+function hasTableId(req, res, next) {
+    const reservationId = req.body.data.reservation_id;
+    if (reservationId) {
+        res.locals.reservationId = reservationId;
+        return next();
+    } else {
+        next({
+            status: 400,
+            message: "reservation_id property is missing",
+        });
+    }
+}
 async function reservationExists(req, res, next) {
     const reservation = await service.findReservationId(
         res.locals.reservationId
