@@ -22,6 +22,17 @@ async function update(req, res, next) {
     const data = req.body.data;
     const table = res.locals.table;
     const response = await service.update(data, table);
+    const status = res.locals.reservation.status;
+    // console.log(status);
+    if (status === "booked") {
+        await service.updateStatus(response[0], "seated");
+    }
+    if (status === "seated") {
+        next({
+            status: 400,
+            message: "status cannot be updated from seated",
+        });
+    }
     return res.json({
         data: response[0],
     });
@@ -30,6 +41,7 @@ async function update(req, res, next) {
 async function remove(req, res, next) {
     const tableId = req.params.table_id;
     const response = await service.remove(tableId);
+    await service.updateStatus(res.locals.table, "finished");
     return res.status(200).json({
         data: response[0],
     });

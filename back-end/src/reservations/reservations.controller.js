@@ -49,6 +49,17 @@ async function edit(req, res, next) {
     });
 }
 
+async function hasReservationId(req, res, next) {
+    const reservationId = await service.search(req.params.reservation_id);
+    if (reservationId.length > 0) {
+        return next();
+    }
+    next({
+        status: 404,
+        message: `${req.params.reservation_id} reservation_id not found`,
+    });
+}
+
 function hasData(req, res, next) {
     // console.log("data31231231", req.body);
     // console.log("data", req.body.data);
@@ -164,6 +175,17 @@ function hasPeople(req, res, next) {
     }
 }
 
+function hasValidStatus(req, res, next) {
+    const status = req.body.data.status;
+    if (status === "booked" || !status) {
+        return next();
+    }
+    next({
+        status: 400,
+        message: "status cannot be seated or finished",
+    });
+}
+
 function validReservationDate(reservationDate) {
     const convertedToday = moment().format().split("T")[0].replace(/\D/g, "");
     const convertedReservationDate = reservationDate.replace(/\D/g, ""); //regexed date from request
@@ -200,6 +222,42 @@ function validReservationTime(reservationTime) {
     );
 }
 
+async function updateStatus(req, res, next) {
+    const reservationId = req.params.reservation_id;
+    const status = req.body.data.status;
+    const updatedReservation = await service.updateStatus(
+        reservationId,
+        status
+    );
+
+    res.json({
+        data: updatedReservation[0],
+    });
+}
+
+async function validateStatus(req, res, next) {
+    const reservationId = await service.search(req.params.reservation_id);
+    // console.log("before", req.body.data.status);
+    const status = req.body.data.status;
+    if (status != "unknown") {
+        if (
+            reservationId[0].status === "booked" ||
+            reservationId[0].status === "seated"
+        ) {
+            // console.log("after", req.body.data.status);
+            return next();
+        }
+        next({
+            status: 400,
+            message: `status ${reservationId[0].status} cannot be updated`,
+        });
+    }
+    next({
+        status: 400,
+        message: `status ${status} is invalid`,
+    });
+}
+
 module.exports = {
     list: [asyncErrorBoundary(list)],
     create: [
@@ -210,10 +268,12 @@ module.exports = {
         hasReservationDate,
         hasReservationTime,
         hasPeople,
+        hasValidStatus,
         asyncErrorBoundary(create),
     ],
     search: [asyncErrorBoundary(search)],
     edit: [
+        asyncErrorBoundary(hasReservationId),
         hasData,
         hasFirstName,
         hasLastName,
@@ -221,6 +281,12 @@ module.exports = {
         hasReservationDate,
         hasReservationTime,
         hasPeople,
+        hasValidStatus,
         asyncErrorBoundary(edit),
+    ],
+    update: [
+        asyncErrorBoundary(hasReservationId),
+        asyncErrorBoundary(validateStatus),
+        asyncErrorBoundary(updateStatus),
     ],
 };

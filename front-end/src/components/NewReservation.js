@@ -26,17 +26,16 @@ function NewReservation() {
         event.preventDefault();
         try {
             const abortController = new AbortController();
-            // console.log("here", formData);
+
             const response = await createReservation(
                 { ...formData },
                 abortController.signal
             );
-            // console.log(`/dashboard?date=${formData.reservation_date}`);
+
             history.push(`/dashboard?date=${formData.reservation_date}`);
             return response;
         } catch (error) {
             setError(error);
-            // console.error(error);
         }
     }
 

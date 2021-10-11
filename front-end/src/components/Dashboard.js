@@ -80,20 +80,23 @@ function Dashboard({ todayDate }) {
     }
 
     function showSeatButton(reservation) {
-        return (
-            <Link
-                to={{
-                    pathname: `/reservations/${reservation.reservation_id}/seat`,
-                    state: {
-                        tables: tables,
-                    },
-                }}
-                type="button"
-                className="btn"
-            >
-                Seat
-            </Link>
-        );
+        if (reservation.status === "booked") {
+            return (
+                <Link
+                    to={{
+                        pathname: `/reservations/${reservation.reservation_id}/seat`,
+                        state: {
+                            tables: tables,
+                        },
+                    }}
+                    type="button"
+                    className="btn"
+                >
+                    Seat
+                </Link>
+            );
+        }
+        return null;
     }
     async function handleFinish(table) {
         const abortController = new AbortController();
@@ -148,6 +151,12 @@ function Dashboard({ todayDate }) {
                 <th>{reservation.reservation_time}</th>
                 <th>{reservation.reservation_date}</th>
                 <th>{reservation.people}</th>
+                <td
+                    className="d-none d-md-table-cell"
+                    data-reservation-id-status={`${reservation.reservation_id}`}
+                >
+                    {reservation.status}
+                </td>
                 <th>{showSeatButton(reservation)}</th>
             </tr>
         );
@@ -215,6 +224,7 @@ function Dashboard({ todayDate }) {
                             <th>Reservation Time</th>
                             <th>Reservation date</th>
                             <th>People</th>
+                            <th>Status</th>
                             <th>Seat</th>
                         </tr>
                     </thead>

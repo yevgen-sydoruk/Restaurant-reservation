@@ -28,6 +28,12 @@ function remove(tableId) {
         .update({ reservation_id: null });
 }
 
+function updateStatus(table, status) {
+    return knex("reservations")
+        .where({ reservation_id: table.reservation_id })
+        .update({ status: status });
+}
+
 module.exports = {
     list,
     create,
@@ -35,4 +41,5 @@ module.exports = {
     find,
     findReservationId,
     remove,
+    updateStatus,
 };
