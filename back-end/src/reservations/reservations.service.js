@@ -4,15 +4,23 @@ function create(newReservation) {
     return knex("reservations").insert(newReservation, "*");
 }
 
-function list(query) {
-    // console.log(query);
-    const { selectedDate } = query;
-    // console.log(selectedDate);
-    return knex("reservations")
-        .select("*")
-        .where({ reservation_date: query })
-        .whereNot({ status: "finished" })
-        .orderBy("reservation_time", "asc");
+function list(date, mobile_number) {
+    if (date) {
+        const { selectedDate } = date;
+        return knex("reservations")
+            .select("*")
+            .where({ reservation_date: query })
+            .whereNot({ status: "finished" })
+            .orderBy("reservation_time", "asc");
+    }
+
+    if (mobile_number) {
+        return knex("reservations")
+            .select("*")
+            .where("mobile_number", "like", `${mobile_number}%`);
+    }
+
+    return knex(tableName).select("*");
 }
 
 function search(reservationId) {

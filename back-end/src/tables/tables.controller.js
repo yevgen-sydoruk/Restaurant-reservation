@@ -10,6 +10,7 @@ async function list(req, res, next) {
     });
 }
 
+
 async function create(req, res, next) {
     // console.log(req.body.data);
     const newTable = await service.create(req.body.data);
