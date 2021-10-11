@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { listReservations, listTables } from "../utils/api";
+import { Link, useLocation, useHistory } from "react-router-dom";
+import { listReservations, listTables, finishTable } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 let moment = require("moment");
 
@@ -11,6 +11,7 @@ let moment = require("moment");
  * @returns {JSX.Element}
  */
 function Dashboard({ todayDate }) {
+    const history = useHistory();
     const query = new URLSearchParams(useLocation().search);
     const queryDate = query.get("date");
 
@@ -18,7 +19,7 @@ function Dashboard({ todayDate }) {
     const [reservationsError, setReservationsError] = useState(null);
 
     const [tables, setTables] = useState([]);
-    const [tablesError, setTablesError] = useState(null);
+    const [error, setError] = useState(null);
 
     const [selectedDate, setSelectedDate] = useState(
         queryDate ? queryDate : todayDate
@@ -40,11 +41,11 @@ function Dashboard({ todayDate }) {
                 console.error(error);
             }
             try {
-                setTablesError(null);
+                setError(null);
                 const response = await listTables(abortController.signal);
                 setTables(response);
             } catch (error) {
-                setTablesError(error);
+                setError(error);
                 console.error(error);
             }
         }
@@ -94,6 +95,48 @@ function Dashboard({ todayDate }) {
             </Link>
         );
     }
+    async function handleFinish(table) {
+        const abortController = new AbortController();
+        try {
+            if (
+                window.confirm(
+                    `Is this table ready to seat new guests? This cannot be undone.`
+                )
+            ) {
+                const response = await finishTable(
+                    table,
+                    abortController.signal
+                );
+                history.go(0);
+                return response;
+            }
+        } catch (error) {
+            setError(error);
+        }
+    }
+
+    function showFinishButton(table, reservationId) {
+        if (reservationId) {
+            return (
+                <button
+                    className="btn"
+                    data-table-id-finish={table.table_id}
+                    onClick={() => handleFinish(table)}
+                >
+                    Finish
+                </button>
+            );
+        }
+        return (
+            <button
+                className="btn"
+                data-table-id-finish={table.table_id}
+                disabled
+            >
+                Empty
+            </button>
+        );
+    }
 
     const reservationRows = reservations.map((reservation) => {
         return (
@@ -119,6 +162,7 @@ function Dashboard({ todayDate }) {
                 <th data-table-id-status={table.table_id}>
                     {table.reservation_id ? "Occupied" : "Free"}
                 </th>
+                <td>{showFinishButton(table, table.reservation_id)}</td>
             </tr>
         );
     });
@@ -177,12 +221,12 @@ function Dashboard({ todayDate }) {
                     <tbody>{reservationRows}</tbody>
                 </table>
                 <h3>Tables</h3>
-                <ErrorAlert error={tablesError} />
+                <ErrorAlert error={error} />
                 <table className="table">
                     <thead>
                         <tr>
                             <th>Id</th>
-                            <th>Name</th>
+                            <th>Table Location</th>
                             <th>Capacity</th>
                             <th>Availability</th>
                             <th>Finish</th>
