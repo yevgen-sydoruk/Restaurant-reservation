@@ -124,3 +124,8 @@ export async function finishTable(table, signal) {
     };
     return await fetchJson(url, options);
 }
+
+// export async function searchMobileNumber(mobileNumber, signal) {
+//     const url = new URL(`${API_BASE_URL}/reservations`);
+
+// }

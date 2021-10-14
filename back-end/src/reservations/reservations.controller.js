@@ -26,8 +26,9 @@ async function create(req, res, next) {
 async function list(req, res, next) {
     const date = req.query.date;
     const mobile_number = req.query.mobile_number;
-    // console.log(query);
+    console.log(date, mobile_number);
     const data = await service.list(date, mobile_number);
+    console.log("data", data);
     res.json({ data });
 }
 

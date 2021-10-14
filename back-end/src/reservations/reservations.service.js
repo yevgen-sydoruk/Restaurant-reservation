@@ -7,6 +7,7 @@ function create(newReservation) {
 function list(query, mobile_number) {
     if (query) {
         const { selectedDate } = query;
+
         return knex("reservations")
             .select("*")
             .where({ reservation_date: query })
@@ -16,8 +17,11 @@ function list(query, mobile_number) {
 
     if (mobile_number) {
         return knex("reservations")
-            .select("*")
-            .where("mobile_number", "like", `${mobile_number}%`);
+            .whereRaw(
+                "translate(mobile_number, '() -', '') like ?",
+                `%${mobile_number.replace(/\D/g, "")}%`
+            )
+            .orderBy("reservation_time", "asc");
     }
 
     return knex(tableName).select("*");
