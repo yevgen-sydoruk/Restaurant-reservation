@@ -7,35 +7,19 @@
 require("dotenv").config();
 const path = require("path");
 
-function environmentSwitch(NODE_ENV) {
-    switch (NODE_ENV) {
-        case "development":
-            return DATABASE_URL_DEVELOPMENT;
-        case "test":
-            return DATABASE_URL_TEST;
-        case "preview":
-            return DATABASE_URL_PREVIEW;
-        case "production":
-            return DATABASE_URL;
-    }
-}
-
 const {
-    NODE_ENV = "development",
-    DATABASE_URL,
-    DATABASE_URL_DEVELOPMENT,
-    DATABASE_URL_TEST,
-    DATABASE_URL_PREVIEW,
+    DATABASE_URL = "postgresql://postgres@localhost/postgres",
+    DATABASE_URL_DEVELOPMENT = "postgresql://postgres@localhost/postgres",
+    DATABASE_URL_TEST = "postgresql://postgres@localhost/postgres",
+    DATABASE_URL_PREVIEW = "postgresql://postgres@localhost/postgres",
     DEBUG,
 } = process.env;
-
-const URL = environmentSwitch(NODE_ENV);
 
 module.exports = {
     development: {
         client: "postgresql",
         pool: { min: 1, max: 5 },
-        connection: URL,
+        connection: DATABASE_URL_DEVELOPMENT,
         migrations: {
             directory: path.join(__dirname, "src", "db", "migrations"),
         },
@@ -47,7 +31,7 @@ module.exports = {
     test: {
         client: "postgresql",
         pool: { min: 1, max: 5 },
-        connection: URL,
+        connection: DATABASE_URL_TEST,
         migrations: {
             directory: path.join(__dirname, "src", "db", "migrations"),
         },
@@ -59,7 +43,7 @@ module.exports = {
     preview: {
         client: "postgresql",
         pool: { min: 1, max: 5 },
-        connection: URL,
+        connection: DATABASE_URL_PREVIEW,
         migrations: {
             directory: path.join(__dirname, "src", "db", "migrations"),
         },
@@ -71,7 +55,7 @@ module.exports = {
     production: {
         client: "postgresql",
         pool: { min: 1, max: 5 },
-        connection: URL,
+        connection: DATABASE_URL,
         migrations: {
             directory: path.join(__dirname, "src", "db", "migrations"),
         },
