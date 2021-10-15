@@ -19,6 +19,7 @@ function Search() {
         )
             .then(setReservations)
             .catch(setError);
+        console.error(error);
         return () => abortController.abort();
     }
 

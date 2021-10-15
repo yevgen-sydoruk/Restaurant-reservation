@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useHistory } from "react-router-dom";
-import { listReservations, listTables, finishTable } from "../utils/api";
+import {
+    listReservations,
+    listTables,
+    finishTable,
+    updateReservation,
+} from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 let moment = require("moment");
 
@@ -90,13 +95,27 @@ function Dashboard({ todayDate }) {
                         },
                     }}
                     type="button"
-                    className="btn"
+                    className="btn btn-light btn-sm"
                 >
                     Seat
                 </Link>
             );
         }
-        return null;
+        return (
+            <button
+                to={{
+                    pathname: `/reservations/${reservation.reservation_id}/seat`,
+                    state: {
+                        tables: tables,
+                    },
+                }}
+                type="button"
+                className="btn btn-light btn-sm"
+                disabled
+            >
+                Seat
+            </button>
+        );
     }
     async function handleFinish(table) {
         const abortController = new AbortController();
@@ -115,6 +134,7 @@ function Dashboard({ todayDate }) {
             }
         } catch (error) {
             setError(error);
+            console.error(error);
         }
     }
 
@@ -140,24 +160,92 @@ function Dashboard({ todayDate }) {
             </button>
         );
     }
+    function editReservation(reservation) {
+        if (reservation.status === "booked") {
+            return (
+                <Link
+                    to={{
+                        pathname: `/reservations/${reservation.reservation_id}/edit`,
+                        state: {
+                            date: reservation.reservation_date,
+                        },
+                    }}
+                    type="button"
+                    className="btn btn-light btn-sm"
+                >
+                    Edit
+                </Link>
+            );
+        }
+        return null;
+    }
 
+    function cancelButton(reservation) {
+        if (reservation.status === "booked") {
+            return (
+                <button
+                    className="btn btn-danger"
+                    onClick={() => cancelReservation(reservation)}
+                >
+                    Cancel
+                </button>
+            );
+        } else {
+            return (
+                <button className="btn danger" disabled>
+                    Cancel
+                </button>
+            );
+        }
+    }
+
+    async function cancelReservation(reservation) {
+        try {
+            if (
+                window.confirm(
+                    `Do you want to cancel this reservation? This cannot be undone.`
+                )
+            ) {
+                const abortController = new AbortController();
+                const response = await updateReservation(
+                    reservation,
+                    "cancelled",
+                    abortController.signal
+                );
+                history.go(0);
+                return response;
+            }
+        } catch (error) {
+            setError(error);
+            console.error(error);
+        }
+    }
     const reservationRows = reservations.map((reservation) => {
         return (
-            <tr key={reservation.reservation_id}>
-                <th>{reservation.reservation_id}</th>
-                <th>{reservation.first_name}</th>
-                <th>{reservation.last_name}</th>
-                <th>{reservation.mobile_number}</th>
-                <th>{reservation.reservation_time}</th>
-                <th>{reservation.reservation_date}</th>
-                <th>{reservation.people}</th>
+            <tr
+                className="text-truncate"
+                style={{ height: "48px" }}
+                key={reservation.reservation_id}
+            >
+                <td>{reservation.reservation_id}</td>
+                <td>{reservation.first_name}</td>
+                <td>{reservation.last_name}</td>
+                <td>{reservation.mobile_number}</td>
+                <td>{reservation.reservation_time}</td>
+                <td>{reservation.reservation_date}</td>
+                <td>{reservation.people}</td>
                 <td
                     className="d-none d-md-table-cell"
                     data-reservation-id-status={`${reservation.reservation_id}`}
                 >
                     {reservation.status}
                 </td>
-                <th>{showSeatButton(reservation)}</th>
+
+                <td>{showSeatButton(reservation)}</td>
+                <td>{editReservation(reservation)}</td>
+                <td data-reservation-id-cancel={reservation.reservation_id}>
+                    {cancelButton(reservation)}
+                </td>
             </tr>
         );
     });
@@ -165,12 +253,12 @@ function Dashboard({ todayDate }) {
     const tableRows = tables.map((table) => {
         return (
             <tr key={table.table_id}>
-                <th>{table.table_id}</th>
-                <th>{table.table_name}</th>
-                <th>{table.capacity}</th>
-                <th data-table-id-status={table.table_id}>
+                <td>{table.table_id}</td>
+                <td>{table.table_name}</td>
+                <td>{table.capacity}</td>
+                <td data-table-id-status={table.table_id}>
                     {table.reservation_id ? "Occupied" : "Free"}
-                </th>
+                </td>
                 <td>{showFinishButton(table, table.reservation_id)}</td>
             </tr>
         );
@@ -220,12 +308,14 @@ function Dashboard({ todayDate }) {
                             <th>Id</th>
                             <th>First Name</th>
                             <th>Last Name</th>
-                            <th>Mobile Number</th>
+                            <th>Mobile №</th>
                             <th>Reservation Time</th>
                             <th>Reservation date</th>
                             <th>People</th>
                             <th>Status</th>
                             <th>Seat</th>
+                            <th>Edit</th>
+                            <th>Cancel</th>
                         </tr>
                     </thead>
                     <tbody>{reservationRows}</tbody>

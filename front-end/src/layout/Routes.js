@@ -10,6 +10,7 @@ import Search from "../components/Search";
 
 import NotFound from "./NotFound";
 import { today } from "../utils/date-time";
+import EditReservation from "../components/EditReservation";
 
 /**
  * Defines all the routes for the application.
@@ -47,6 +48,9 @@ function Routes() {
             </Route>
             <Route path="/dashboard/:mobile_number">
                 <Dashboard />
+            </Route>
+            <Route exact={true} path="/reservations/:reservation_id/edit">
+                <EditReservation />
             </Route>
             <Route>
                 <NotFound />

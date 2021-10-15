@@ -26,9 +26,7 @@ async function create(req, res, next) {
 async function list(req, res, next) {
     const date = req.query.date;
     const mobile_number = req.query.mobile_number;
-    console.log(date, mobile_number);
     const data = await service.list(date, mobile_number);
-    console.log("data", data);
     res.json({ data });
 }
 
@@ -155,7 +153,7 @@ function hasReservationTime(req, res, next) {
         }
         next({
             status: 400,
-            message: `reservation_time must be after 9:30am and before 10:30pm.`,
+            message: `reservation_time must be after 10:30am and before 10:30pm.`,
         });
     } else {
         next({
@@ -202,7 +200,8 @@ function validReservationDate(reservationDate) {
 }
 
 function validReservationTime(reservationTime) {
-    reservationTime = reservationTime.replace(/\D/g, "");
+    reservationTime = reservationTime.replace(/\D/g, "").slice(0, 4);
+
     let openHours = moment();
     openHours.set({ hour: 10, minute: 30, second: 0 });
     convertedOpenHours = openHours
