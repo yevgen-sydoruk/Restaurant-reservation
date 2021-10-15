@@ -72,17 +72,18 @@ function Search() {
                     />
                 </div>
 
-                <button className="btn btn-primary" type="submit">
+                <button className="btn btn-primary mb-3 btn-lg" type="submit">
                     Find
                 </button>
             </form>
+            <h3>Result:</h3>
             {reservations.length <= 0 ? (
                 <h3>"No reservations found"</h3>
             ) : (
-                <table className="table table-hover m-1">
+                <table className="table table-striped table-hover table-bordered">
                     <thead className="thead-light">
                         <tr>
-                            <th scope="col">ID</th>
+                            <th scope="col">#</th>
                             <th scope="col">Name</th>
                             <th scope="col">Mobile Number</th>
                             <th scope="col">Date</th>

@@ -12,18 +12,22 @@ import "./Layout.css";
  * @returns {JSX.Element}
  */
 function Layout() {
-  return (
-    <div className="container-fluid">
-      <div className="row h-100">
-        <div className="col-md-2 side-bar">
-          <Menu />
+    return (
+        <div className="container-fluid ">
+            <div className="main-c d-flex container-fluid justify-content-between h-100">
+                <div
+                    className="menu col-md-2 side-bar h-100 w-300"
+
+                    // style={{ "min-height": "100vh" }}
+                >
+                    <Menu />
+                </div>
+                <div className="routes col">
+                    <Routes />
+                </div>
+            </div>
         </div>
-        <div className="col">
-          <Routes />
-        </div>
-      </div>
-    </div>
-  );
+    );
 }
 
 export default Layout;

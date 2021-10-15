@@ -87,7 +87,7 @@ function SeatOption() {
                     <select
                         name="table_id"
                         id="table_id"
-                        className="form-control"
+                        className="form-control mb-3"
                         value={table ? table.table_name : "table"}
                         onChange={(event) => handleChange(event)}
                     >
@@ -96,8 +96,17 @@ function SeatOption() {
                         </option>
                         {tableOptions}
                     </select>
-                    <button type="submit">Submit</button>
-                    <button onClick={() => handleCancel()} type="button">
+                    <button
+                        type="submit"
+                        className="btn btn-primary btn-md mr-3"
+                    >
+                        Submit
+                    </button>
+                    <button
+                        onClick={() => handleCancel()}
+                        type="button"
+                        className="btn btn-secondary btn-md"
+                    >
                         Cancel
                     </button>
                 </form>

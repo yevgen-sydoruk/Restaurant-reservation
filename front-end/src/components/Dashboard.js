@@ -7,6 +7,7 @@ import {
     updateReservation,
 } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
+import "./Dashboard.css";
 let moment = require("moment");
 
 /**
@@ -95,7 +96,7 @@ function Dashboard({ todayDate }) {
                         },
                     }}
                     type="button"
-                    className="btn btn-light btn-sm"
+                    className="btn btn-warning btn-md"
                 >
                     Seat
                 </Link>
@@ -110,7 +111,7 @@ function Dashboard({ todayDate }) {
                     },
                 }}
                 type="button"
-                className="btn btn-light btn-sm"
+                className="btn btn-warning btn-md"
                 disabled
             >
                 Seat
@@ -142,7 +143,7 @@ function Dashboard({ todayDate }) {
         if (reservationId) {
             return (
                 <button
-                    className="btn"
+                    className="btn btn-warning btn-md"
                     data-table-id-finish={table.table_id}
                     onClick={() => handleFinish(table)}
                 >
@@ -152,7 +153,7 @@ function Dashboard({ todayDate }) {
         }
         return (
             <button
-                className="btn"
+                className="btn btn-warning btn-md"
                 data-table-id-finish={table.table_id}
                 disabled
             >
@@ -171,13 +172,27 @@ function Dashboard({ todayDate }) {
                         },
                     }}
                     type="button"
-                    className="btn btn-light btn-sm"
+                    className="btn btn-warning btn-md"
                 >
                     Edit
                 </Link>
             );
         }
-        return null;
+        return (
+            <button
+                to={{
+                    pathname: `/reservations/${reservation.reservation_id}/edit`,
+                    state: {
+                        date: reservation.reservation_date,
+                    },
+                }}
+                type="button"
+                className="btn btn-warning btn-md"
+                disabled
+            >
+                Edit
+            </button>
+        );
     }
 
     function cancelButton(reservation) {
@@ -223,19 +238,24 @@ function Dashboard({ todayDate }) {
     const reservationRows = reservations.map((reservation) => {
         return (
             <tr
-                className="text-truncate"
+                className="text-center"
                 style={{ height: "48px" }}
                 key={reservation.reservation_id}
             >
-                <td>{reservation.reservation_id}</td>
+                <th className="d-none d-lg-table-cell">
+                    {reservation.reservation_id}
+                </th>
                 <td>{reservation.first_name}</td>
                 <td>{reservation.last_name}</td>
-                <td>{reservation.mobile_number}</td>
+                <td className="d-none d-lg-table-cell">
+                    {reservation.mobile_number}
+                </td>
                 <td>{reservation.reservation_time}</td>
-                <td>{reservation.reservation_date}</td>
-                <td>{reservation.people}</td>
+                <td className="d-none d-lg-table-cell">
+                    {reservation.reservation_date}
+                </td>
+                <td className="d-none d-lg-table-cell">{reservation.people}</td>
                 <td
-                    className="d-none d-md-table-cell"
                     data-reservation-id-status={`${reservation.reservation_id}`}
                 >
                     {reservation.status}
@@ -253,7 +273,7 @@ function Dashboard({ todayDate }) {
     const tableRows = tables.map((table) => {
         return (
             <tr key={table.table_id}>
-                <td>{table.table_id}</td>
+                <th>{table.table_id}</th>
                 <td>{table.table_name}</td>
                 <td>{table.capacity}</td>
                 <td data-table-id-status={table.table_id}>
@@ -268,72 +288,103 @@ function Dashboard({ todayDate }) {
         //errorAlert ask mentor
         <main>
             <div className="container">
-                <h1>Dashboard</h1>
-                <ErrorAlert error={reservationsError} />
-                <h3>Reservation</h3>
-                <div className="form-group">
-                    <label htmlFor="date">Date</label>
-                    <input
-                        id="date"
-                        name="date"
-                        className="form-control"
-                        type="date"
-                        value={selectedDate}
-                        onChange={(event) => {
-                            handleChange(event);
-                        }}
-                        required
-                    />
-                </div>
-                <div className="btn-group">
-                    <button type="button" onClick={() => handlePreviousBtn()}>
-                        Previous Date
-                    </button>
-                    <button type="button" onClick={() => handleCurrentBtn()}>
-                        Current Date
-                    </button>
-                    <button type="button" onClick={() => handleNextBtn()}>
-                        Next Date
-                    </button>
-                </div>
-                <div className="d-md-flex mb-3">
-                    <h4 className="mb-0">
-                        Reservations for date {selectedDate}
-                    </h4>
-                </div>
+                <div className="d-grid gap-2 mb-2">
+                    <h1>Dashboard</h1>
+                    <ErrorAlert error={reservationsError} />
+                    <h3>Reservation</h3>
+                    <div className="form-group">
+                        <label htmlFor="date">Date</label>
+                        <input
+                            id="date"
+                            name="date"
+                            className="form-control"
+                            type="date"
+                            value={selectedDate}
+                            onChange={(event) => {
+                                handleChange(event);
+                            }}
+                            required
+                        />
+                    </div>
+                    <div className="btn-group mb-3">
+                        <button
+                            type="button"
+                            className="form-control btn btn-primary mr-2 rounded-start btn-lg text-nowrap"
+                            onClick={() => handlePreviousBtn()}
+                        >
+                            Previous Date
+                        </button>
+                        <button
+                            type="button"
+                            className="form-control btn btn-primary mr-2 btn-lg text-nowrap"
+                            onClick={() => handleCurrentBtn()}
+                        >
+                            Current Date
+                        </button>
+                        <button
+                            type="button"
+                            className="form-control btn btn-primary mr-2 rounded-end btn-lg text-nowrap"
+                            onClick={() => handleNextBtn()}
+                        >
+                            Next Date
+                        </button>
+                    </div>
+                    <div className="d-md-flex mb-3">
+                        <h4 className="mb-0">
+                            Reservations for date {selectedDate}
+                        </h4>
+                    </div>
 
-                <table className="table">
-                    <thead>
-                        <tr>
-                            <th>Id</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Mobile №</th>
-                            <th>Reservation Time</th>
-                            <th>Reservation date</th>
-                            <th>People</th>
-                            <th>Status</th>
-                            <th>Seat</th>
-                            <th>Edit</th>
-                            <th>Cancel</th>
-                        </tr>
-                    </thead>
-                    <tbody>{reservationRows}</tbody>
-                </table>
-                <h3>Tables</h3>
-                <ErrorAlert error={error} />
-                <table className="table">
-                    <thead>
-                        <tr>
-                            <th>Id</th>
-                            <th>Table Location</th>
-                            <th>Capacity</th>
-                            <th>Availability</th>
-                            <th>Finish</th>
-                        </tr>
-                    </thead>
-                    <tbody>{tableRows}</tbody>
-                </table>
+                    <table
+                        className="table table-striped table-hover table-bordered"
+                        id="reservations"
+                    >
+                        <thead>
+                            <tr>
+                                <th
+                                    className="d-none d-lg-table-cell"
+                                    scope="col"
+                                >
+                                    #
+                                </th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th className="d-none d-lg-table-cell">
+                                    Mobile №
+                                </th>
+                                <th>Reservation Time</th>
+                                <th className="d-none d-lg-table-cell">
+                                    Reservation date
+                                </th>
+                                <th className="d-none d-lg-table-cell">
+                                    People
+                                </th>
+                                <th>Status</th>
+                                <th>Seat</th>
+                                <th>Edit</th>
+                                <th>Cancel</th>
+                            </tr>
+                        </thead>
+                        <tbody>{reservationRows}</tbody>
+                    </table>
+                    <h3>Tables</h3>
+                    <ErrorAlert error={error} />
+                    <table
+                        className="table table-striped table-hover table-bordered"
+                        id="tables"
+                    >
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Table Location</th>
+                                <th>Capacity</th>
+                                <th>Availability</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>{tableRows}</tbody>
+                    </table>
+                </div>
             </div>
         </main>
     );

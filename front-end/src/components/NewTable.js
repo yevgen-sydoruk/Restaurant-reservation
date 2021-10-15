@@ -77,12 +77,12 @@ function NewTable() {
                         required
                     />
                 </div>
-                <button type="submit" className="btn btn-primary">
+                <button type="submit" className="btn btn-primary mr-3 btn-lg">
                     Submit
                 </button>
                 <button
                     type="button"
-                    className="btn btn-secondary"
+                    className="btn btn-secondary btn-lg"
                     onClick={() => handleCancel()}
                 >
                     Cancel

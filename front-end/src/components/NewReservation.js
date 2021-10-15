@@ -170,11 +170,11 @@ function NewReservation() {
                         required
                     />
                 </div>
-                <button className="btn btn-primary" type="submit">
+                <button className="btn btn-primary mr-2 btn-lg" type="submit">
                     Submit
                 </button>
                 <button
-                    className="btn btn-secondary"
+                    className="btn btn-secondary btn-lg"
                     onClick={() => handleCancel()}
                 >
                     Cancel
