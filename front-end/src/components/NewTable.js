@@ -27,7 +27,6 @@ function NewTable() {
 
     async function handleSubmit(event) {
         event.preventDefault();
-        // console.log(event);
         try {
             const abortController = new AbortController();
             const response = await createTable(
@@ -35,7 +34,6 @@ function NewTable() {
                 abortController.signal
             );
             history.push(`/`);
-            // console.log(response);
             return response;
         } catch (error) {
             setError(error);

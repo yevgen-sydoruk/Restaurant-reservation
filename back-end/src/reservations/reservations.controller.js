@@ -16,7 +16,6 @@ let weekDays = [
 ];
 
 async function create(req, res, next) {
-    // console.log(req.body.data);
     const newReservation = await service.create(req.body.data);
     res.status(201).json({
         data: newReservation[0],
@@ -61,8 +60,6 @@ async function hasReservationId(req, res, next) {
 }
 
 function hasData(req, res, next) {
-    // console.log("data31231231", req.body);
-    // console.log("data", req.body.data);
     const data = req.body.data;
     if (data) {
         return next();
@@ -75,10 +72,7 @@ function hasData(req, res, next) {
 }
 
 function hasFirstName(req, res, next) {
-    // console.log("data31231231", req.body);
     const firstName = req.body.data.first_name;
-    // console.log("firstName", firstName);
-
     if (firstName) {
         return next();
     } else {
@@ -91,8 +85,6 @@ function hasFirstName(req, res, next) {
 
 function hasLastName(req, res, next) {
     const lastName = req.body.data.last_name;
-    // console.log("lastName", lastName);
-
     if (lastName) {
         return next();
     } else {
@@ -105,11 +97,9 @@ function hasLastName(req, res, next) {
 
 function hasMobileNumber(req, res, next) {
     const mobileNumber = req.body.data.mobile_number;
-    // console.log("mobileNumber", mobileNumber);
     let validation1 = /^([0-9]{3})[-. ]?([0-9]{4})$/im;
     let validation2 =
         /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
-    // /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
     if (!mobileNumber) {
         next({
             status: 400,
@@ -238,14 +228,12 @@ async function updateStatus(req, res, next) {
 
 async function validateStatus(req, res, next) {
     const reservationId = await service.search(req.params.reservation_id);
-    // console.log("before", req.body.data.status);
     const status = req.body.data.status;
     if (status != "unknown") {
         if (
             reservationId[0].status === "booked" ||
             reservationId[0].status === "seated"
         ) {
-            // console.log("after", req.body.data.status);
             return next();
         }
         next({

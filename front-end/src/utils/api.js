@@ -31,9 +31,7 @@ headers.append("Content-Type", "application/json");
  */
 async function fetchJson(url, options, onCancel) {
     try {
-        // console.log("option here", options);
         const response = await fetch(url, options);
-        // console.log("response from fetch", response);
         if (response.status === 204) {
             return null;
         }
@@ -60,11 +58,8 @@ async function fetchJson(url, options, onCancel) {
  */
 
 export async function listReservations(params, signal) {
-    // console.log("params", params);
-    // console.log("headers", headers);
     const url = new URL(`${API_BASE_URL}/reservations`);
     Object.entries(params).forEach(([key, value]) => {
-        // console.log("here:", key, value);
         url.searchParams.append(key, value.toString());
     });
     return await fetchJson(url, { headers, signal }, [])
@@ -79,8 +74,6 @@ export async function listTables(signal) {
 
 export async function createReservation(data, signal) {
     const url = `${API_BASE_URL}/reservations/new`;
-    // console.log(url);
-    // console.log(data);
     const options = {
         method: "POST",
         headers,
@@ -92,7 +85,6 @@ export async function createReservation(data, signal) {
 
 export async function createTable(data, signal) {
     const url = `${API_BASE_URL}/tables/new`;
-    // console.log(data);
     const options = {
         method: "POST",
         headers,
@@ -104,7 +96,6 @@ export async function createTable(data, signal) {
 
 export async function updateSeat(data, signal) {
     const url = new URL(`${API_BASE_URL}/tables/${data.table_id}/seat`);
-    // console.log(data);
     const options = {
         method: "PUT",
         headers,

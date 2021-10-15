@@ -7,7 +7,6 @@ import {
     updateReservation,
 } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
-import "./Dashboard.css";
 let moment = require("moment");
 
 /**
@@ -35,7 +34,6 @@ function Dashboard({ todayDate }) {
         setReservationsError(null);
         async function loadDashboard() {
             try {
-                // setError(null);
                 const date = selectedDate; //for test pass
                 const response = await listReservations(
                     { date },
@@ -285,7 +283,6 @@ function Dashboard({ todayDate }) {
     });
 
     return (
-        //errorAlert ask mentor
         <main>
             <div className="container">
                 <div className="d-grid gap-2 mb-2">

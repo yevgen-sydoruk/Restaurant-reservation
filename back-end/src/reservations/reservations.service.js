@@ -6,8 +6,6 @@ function create(newReservation) {
 
 function list(query, mobile_number) {
     if (query) {
-        const { selectedDate } = query;
-
         return knex("reservations")
             .select("*")
             .where({ reservation_date: query })

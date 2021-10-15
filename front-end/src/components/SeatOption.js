@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-// { useState }
 import { useHistory, useParams } from "react-router-dom";
 import { listTables, updateSeat } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
@@ -17,7 +16,6 @@ function SeatOption() {
         setSeatError(null);
         async function loadTables() {
             try {
-                // const date = selectedDate; //for test pass
                 const response = await listTables(abortController.signal);
                 setAllTables(response);
             } catch (error) {
@@ -35,7 +33,6 @@ function SeatOption() {
         if (table) {
             try {
                 const abortController = new AbortController();
-                // console.log("here", formData);
                 const response = await updateSeat(
                     { ...table, reservation_id: reservation_id },
                     abortController.signal
@@ -62,7 +59,6 @@ function SeatOption() {
     }
 
     const tableOptions = allTables.map((table) => {
-        // console.log(table);
         if (!table.reservation_id) {
             return (
                 <option key={table.table_id} value={table.table_name}>

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { createReservation } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
-//
 
 function NewReservation() {
     //form boilerplate
@@ -68,15 +67,6 @@ function NewReservation() {
             10
         )}`;
     }
-
-    // function formatMobileNumber(value) {
-    //     value = value.replace(/[^\d]/g, "");
-    //     if (value.length < 5) return value;
-    //     if (value.length < 7) {
-    //         return `${value.slice(0, 3)}-${value.slice(3)}`;
-    //     }
-    //     return `${value.slice(0, 3)}-${value.slice(3, 7)}`;
-    // }
 
     return (
         <div className="container">

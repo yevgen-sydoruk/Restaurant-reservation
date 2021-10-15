@@ -1,18 +1,14 @@
 const service = require("./tables.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
-// let moment = require("moment");
 
 async function list(req, res, next) {
-    // console.log(req.body.data);
     const newTableList = await service.list();
     return res.json({
         data: newTableList,
     });
 }
 
-
 async function create(req, res, next) {
-    // console.log(req.body.data);
     const newTable = await service.create(req.body.data);
     return res.status(201).json({
         data: newTable[0],
@@ -24,7 +20,6 @@ async function update(req, res, next) {
     const table = res.locals.table;
     const response = await service.update(data, table);
     const status = res.locals.reservation.status;
-    // console.log(status);
     if (status === "booked") {
         await service.updateStatus(response[0], "seated");
     }
@@ -62,7 +57,6 @@ function hasData(req, res, next) {
 
 function hasTableName(req, res, next) {
     const tableName = req.body.data.table_name;
-    // console.log(tableName, tableName.length !== 1);
     if (tableName) {
         if (tableName.length > 1) {
             return next();
@@ -162,7 +156,6 @@ function tableOccupied(req, res, next) {
 }
 
 function tableIsNotOccupied(req, res, next) {
-    // console.log("here id", res.locals.table.reservation_id);
     if (res.locals.table.reservation_id) {
         return next();
     } else {

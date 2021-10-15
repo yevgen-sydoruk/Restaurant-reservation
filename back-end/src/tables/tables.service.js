@@ -22,7 +22,6 @@ function findReservationId(reservationId) {
         .first();
 }
 function remove(tableId) {
-    console.log("here");
     return knex("tables")
         .where({ table_id: tableId })
         .update({ reservation_id: null });
