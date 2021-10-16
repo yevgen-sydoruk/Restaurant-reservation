@@ -1,20 +1,19 @@
-# Capstone: Restaurant Reservation System
+# Capstone: Restaurant Reservation System (made with love)
+# Live version
+https://reservations-sys-frontend.herokuapp.com/dashboard
 
+# About this project
+
+Built using HTML, CSS BOOTSTRAP, JAVASCRIPT, REACT, EXPRESS, NODE, POSTGRESQL, KNEX.
+
+Legend:
 > You have been hired as a full stack developer at _Periodic Tables_, a startup that is creating a reservation system for fine dining restaurants.
 > The software is used only by restaurant personnel when a customer calls to request a reservation.
 > At this point, the customers will not access the system online.
 
-There are no user stories for deployment: it is expected that you will deploy the application to production after you finish a user story.
-
-There are no user stories for logging: it is expected that you will add logging to the application with enough detail to help you diagnose issues in production.
-
 ## Existing files
 
-This repository is set up as a *monorepo*, meaning that the frontend and backend projects are in one repository. This allows you to open both projects in the same editor.
-
-As you work through the user stories listed later in this document, you will be writing code that allows your frontend and backend applications to talk to each other. You will also write code to allow your controllers and services to connect to, and query, your PostgreSQL database via [Knex](http://knexjs.org/).
-
-The table below describes the folders in this starter repository:
+The table below describes the folders in this repository:
 
 | Folder/file path | Description                                                      |
 | ---------------- | ---------------------------------------------------------------- |
@@ -23,19 +22,17 @@ The table below describes the folders in this starter repository:
 
 This starter code closely follows the best practices and patterns established in the Robust Server Structure module.
 
-**Note**: Please do not submit a pull request to this repository with your solution.
-
 ### Backend Existing files
-
-The `./back-end` folder contains all the code for the backend project.
 
 The table below describes the existing files in the `./back-end` folder:
 
 | Folder/file path                                         | Description                                                                                                         |
 | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `./back-end/knexfile.js`                                 | The Knex configuration file. You will not need to make changes to this file.                                        |
+| `./back-end/knexfile.js`                                 | The Knex configuration file.
+|
 | `./back-end/src/app.js`                                  | Defines the Express application and connects routers.                                                               |
-| `./back-end/src/db/connection.js`                        | The Knex connection file. You will not need to make changes to this file.                                           |
+| `./back-end/src/db/connection.js`                        | The Knex connection file.
+|
 | `./back-end/src/db/migrations`                           | The Knex migrations folder.                                                                                         |
 | `./back-end/src/db/seeds/`                               | The Knex seeds folder.                                                                                              |
 | `./back-end/src/errors/errorHandler.js`                  | Defined an Express API error handler.                                                                               |
@@ -43,18 +40,24 @@ The table below describes the existing files in the `./back-end` folder:
 | `./back-end/src/reservations/reservations.controller.js` | A controller for the reservations resource.                                                                         |
 | `./back-end/src/reservations/reservations.router.js`     | A router for the reservations resource.                                                                             |
 | `./back-end/src/server.js`                               | Defines the node server.                                                                                            |
-| `./back-end/test`                                        | A folder that contains all of the integration tests. You will not need to make changes to the files in this folder. |
-| `./back-end/vercel.json`                                 | A vercel deployment configuration file. You will not need to make changes to this file.                             |
+| `./back-end/test`                                        | A folder that contains all of the integration tests. 
+|
+| `./back-end/vercel.json`                                 | A vercel deployment configuration file.
+|
+| `./back-end/src/reservations`                            | A vercel deployment configuration file.
+|
+| `./back-end/src/server.js`                               | A vercel deployment configuration file.
+|
+| `./back-end/src/server.js`                               | A vercel deployment configuration file.
+|
 
 ### Frontend Existing files
-
-The `./front-end` folder contains all the code for the frontend project.
 
 The table below describes the existing files in the `./front-end` folder:
 
 | Folder/file path                                   | Description                                                                                            |
 | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `./front-end/e2e`                                  | Contains all of the end-to-end tests. You will not need to make changes to the files in this folder.   |
+| `./front-end/e2e`                                  | Contains all of the end-to-end tests. 							              |
 | `./front-end/jest-puppeteer.config.js`             | A configuration file used by the end-to-end tests. You will not need to make changes to this file.     |
 | `./front-end/src/App.js`                           | Defines the root application component. You will not need to make changes to this file.                |
 | `./front-end/src/App.test.js`                      | Contains the tests for the root application component. You will not need to make changes to this file. |
