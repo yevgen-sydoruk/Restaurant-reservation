@@ -82,6 +82,7 @@ export async function createReservation(data, signal) {
     const options = {
         method: "POST",
         headers,
+        mode: "cors",
         body: JSON.stringify({ data }),
         signal,
     };
@@ -93,6 +94,7 @@ export async function createTable(data, signal) {
     const options = {
         method: "POST",
         headers,
+        mode: "cors",
         body: JSON.stringify({ data }),
         signal,
     };
@@ -104,6 +106,7 @@ export async function updateSeat(data, signal) {
     const options = {
         method: "PUT",
         headers,
+        mode: "cors",
         body: JSON.stringify({ data: data }),
         signal,
     };
@@ -115,6 +118,7 @@ export async function finishTable(table, signal) {
     const options = {
         method: "DELETE",
         headers,
+        mode: "cors",
         body: JSON.stringify({ data: table }),
         signal,
     };
@@ -126,6 +130,7 @@ export async function updateReservation(reservation, changeStatus, signal) {
     const options = {
         method: "PUT",
         headers,
+        mode: "cors",
         body: JSON.stringify({ data: { status: changeStatus } }),
         signal,
     };
@@ -134,7 +139,7 @@ export async function updateReservation(reservation, changeStatus, signal) {
 
 export async function findReservation(reservation_id, signal) {
     const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}`);
-    return await fetchJson(url, { headers, signal }, {});
+    return await fetchJson(url, { headers, mode: "cors", signal }, {});
 }
 
 export async function editReservation(data, signal) {
@@ -142,6 +147,7 @@ export async function editReservation(data, signal) {
     const options = {
         method: "PUT",
         headers,
+        mode: "cors",
         body: JSON.stringify({ data }),
         signal,
     };
