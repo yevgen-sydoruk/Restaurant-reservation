@@ -13,7 +13,10 @@ const API_BASE_URL =
  */
 const headers = new Headers();
 headers.append("Content-Type", "application/json");
-headers.append("Access-Control-Allow-Origin", "http://localhost:3000");
+headers.append(
+    "Access-Control-Allow-Origin",
+    "http://reservations-sys-frontend.herokuapp.com"
+);
 headers.append("Access-Control-Allow-Credentials", "true");
 
 /**
