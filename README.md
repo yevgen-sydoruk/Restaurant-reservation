@@ -122,18 +122,18 @@ Then fill in data to each field.
 People field cannot be negative or zero.
 Date must be future and not Tuesday. 
 Time must be after 10:30AM and before 10:30PM.
-![New Reservation Button](./Screenshots/NewReservation.png)
+![New Reservation](./screenshots/1createReservation.PNG)
 
 
 ### 2 Add new table
 To create a new table, select the "New Table" button on the navigation panel.
 Then fill in data to each field.
-![New Table Form Filled](./Screenshots/NewTableFilled.png)
+![New Table Form Filled](./screenshots/2createTable.PNG)
 
 ### 3 Seat a reservation
 From Dashboard or Search pages, click the "Seat" button to edit corresponding reservation.
 Select a table from the dropdown menu and click the "Submit" button.
-![Seat Reservation Form Filled](./Screenshots/SeatReservationFilled.png)
+![Seat Reservation Form Filled](./screenshots/3seat.PNG)
 
 ### 4 Edit a reservation
 From Dashboard or Search pages, click the "Edit" button to edit the corresponding reservation.
@@ -141,22 +141,16 @@ Then edit desired fields and click the "Submit" button.
 People field cennot be negative or zero.
 Date must be future and not Tuesday. 
 Time must be after 10:30AM and before 10:30PM.
-![Edit Reservation Form Filled](./Screenshots/EditReservationFilled.png)
+![Edit Reservation Form Filled](./screenshots/4editReservation.PNG)
 
 ### 5 Finish a table
 From Dashboard, click the "Finish" button to edit corresponding table.
 A notification window will pop up.
-![Finish Table Confirmation](./Screenshots/FinishTableConfirm.png)
+![Finish Table Confirmation](./screenshots/5finish.PNG)
 
 ### 6 Search for a reservation by mobile number
 You can search reservations by mobile number. To do that, click the "Search" button on the navigation panel.
 Then enter mobile number into an input field.
-![Date Search Found](./Screenshots/DateSearchFound.png)
+![Date Search Found](./screenshots/6mobile.PNG)
 
-
-
-1. From "Dashboard", click "Search"
-![Search](./Screenshots/Search.png)
-2. Enter phone number or partial phone number into "Mobile Number:" box and click find
-![Search Found](./Screenshots/SearchFound.png)
 
